@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>딜 소싱 파이프라인 | Deal Flow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #F0F4F8;
+      --card-bg: #FFFFFF;
+      --border: #E2E8F0;
+      --text-primary: #1A202C;
+      --text-secondary: #4A5568;
+      --text-muted: #718096;
+      --tech: #2563EB;
+      --tech-light: #EFF6FF;
+      --tech-mid: #BFDBFE;
+      --life: #059669;
+      --life-light: #ECFDF5;
+      --life-mid: #A7F3D0;
+      --gold: #D97706;
+      --gold-light: #FFFBEB;
+      --gold-border: #FCD34D;
+      --radius: 12px;
+      --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-hover: 0 8px 25px rgba(0,0,0,0.10), 0 3px 6px rgba(0,0,0,0.06);
+    }
+
+    body {
+      font-family: 'Inter', 'Noto Sans KR', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: linear-gradient(135deg, #1A202C 0%, #2D3748 100%);
+      color: white;
+      padding: 40px 24px 36px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 20% 50%, rgba(37,99,235,0.15) 0%, transparent 60%),
+                  radial-gradient(ellipse at 80% 50%, rgba(5,150,105,0.15) 0%, transparent 60%);
+    }
+    .header-inner { position: relative; max-width: 900px; margin: 0 auto; }
+    .header-eyebrow {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 20px; padding: 4px 14px; font-size: 11px; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.75);
+      margin-bottom: 16px;
+    }
+    .header h1 {
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+    .header h1 .kr { color: #93C5FD; }
+    .header h1 .sep { color: rgba(255,255,255,0.3); margin: 0 10px; }
+    .header h1 .en { color: white; }
+    .header .subtitle {
+      font-size: 15px;
+      color: rgba(255,255,255,0.6);
+      font-weight: 400;
+      margin-top: 6px;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+    .header-meta {
+      margin-top: 20px;
+      display: flex; justify-content: center; gap: 20px;
+      font-size: 12px; color: rgba(255,255,255,0.5);
+    }
+    .header-meta span { display: flex; align-items: center; gap: 5px; }
+
+    /* ── MAIN CONTAINER ── */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 20px 60px; }
+
+    /* ── STATS BAR ── */
+    .stats-bar {
+      display: flex; gap: 12px; padding: 20px 0 4px;
+      flex-wrap: wrap;
+    }
+    .stat-chip {
+      display: flex; align-items: center; gap: 8px;
+      background: white; border: 1px solid var(--border);
+      border-radius: 20px; padding: 7px 16px;
+      font-size: 13px; font-weight: 600; color: var(--text-secondary);
+      box-shadow: var(--shadow);
+    }
+    .stat-chip .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+    }
+    .stat-chip .count { font-size: 15px; font-weight: 700; color: var(--text-primary); }
+
+    /* ── FILTER BAR ── */
+    .filter-bar {
+      display: flex; gap: 8px; padding: 12px 0 20px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      background: white; border: 1.5px solid var(--border);
+      border-radius: 20px; padding: 7px 18px;
+      font-size: 13px; font-weight: 600; cursor: pointer;
+      color: var(--text-secondary); transition: all 0.15s ease;
+      font-family: inherit;
+    }
+    .filter-btn:hover { border-color: #CBD5E0; background: #F7FAFC; }
+    .filter-btn.active-all {
+      background: var(--text-primary); color: white; border-color: var(--text-primary);
+    }
+    .filter-btn.active-tech {
+      background: var(--tech-light); color: var(--tech); border-color: var(--tech-mid);
+    }
+    .filter-btn.active-life {
+      background: var(--life-light); color: var(--life); border-color: var(--life-mid);
+    }
+
+    /* ── GRID ── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    @media (max-width: 720px) { .cards-grid { grid-template-columns: 1fr; } }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      position: relative;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+    .card.top-pick {
+      border-color: var(--gold-border);
+      box-shadow: var(--shadow), 0 0 0 1px var(--gold-border), 0 4px 20px rgba(217,119,6,0.12);
+    }
+    .card-accent {
+      height: 4px;
+      flex-shrink: 0;
+    }
+
+    /* ── CARD BODY ── */
+    .card-body { padding: 18px 20px 16px; flex: 1; display: flex; flex-direction: column; gap: 12px; }
+
+    /* Top row */
+    .card-top-row {
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    }
+    .sector-pill {
+      font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 12px;
+      text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .sector-pill.tech { background: var(--tech-light); color: var(--tech); }
+    .sector-pill.life { background: var(--life-light); color: var(--life); }
+    .stage-badge {
+      font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 10px;
+      background: #F7FAFC; border: 1px solid var(--border); color: var(--text-muted);
+    }
+    .card-icon { font-size: 18px; margin-left: auto; }
+    .top-pick-star {
+      font-size: 15px; margin-left: 4px;
+      filter: drop-shadow(0 1px 2px rgba(217,119,6,0.4));
+    }
+
+    /* Company name */
+    .card-company {
+      font-size: 20px; font-weight: 800; letter-spacing: -0.02em;
+      color: var(--text-primary); line-height: 1.2;
+    }
+
+    /* Tagline */
+    .card-tagline {
+      font-size: 13px; font-style: italic; color: var(--text-muted); line-height: 1.45;
+    }
+
+    /* Sections */
+    .card-section { display: flex; flex-direction: column; gap: 3px; }
+    .section-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.07em; color: var(--text-muted);
+      display: flex; align-items: center; gap: 5px;
+    }
+    .section-text {
+      font-size: 13px; line-height: 1.55; color: var(--text-secondary);
+    }
+
+    /* Why box */
+    .why-box {
+      background: linear-gradient(135deg, #FFFBEB, #FEF3C7);
+      border: 1px solid #FDE68A;
+      border-radius: 8px; padding: 10px 13px;
+    }
+    .why-box .section-text { color: #78350F; font-size: 12.5px; }
+    .why-box.tech-why {
+      background: linear-gradient(135deg, #EFF6FF, #DBEAFE);
+      border-color: var(--tech-mid);
+    }
+    .why-box.tech-why .section-text { color: #1E3A8A; }
+    .why-box.life-way {
+      background: linear-gradient(135deg, #ECFDF5, #D1FAE5);
+      border-color: var(--life-mid);
+    }
+    .why-box.life-why .section-text { color: #064E3B; }
+
+    /* Card footer */
+    .card-footer {
+      padding: 10px 20px 14px;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 10px;
+    }
+    .date-badge {
+      font-size: 11px; font-weight: 600; color: var(--text-muted);
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 8px; padding: 3px 9px;
+    }
+    .source-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 12px; font-weight: 600; color: var(--tech);
+      text-decoration: none; background: var(--tech-light);
+      border: 1px solid var(--tech-mid); border-radius: 8px; padding: 4px 11px;
+      transition: background 0.12s ease;
+    }
+    .source-btn:hover { background: var(--tech-mid); }
+    .source-btn.life { color: var(--life); background: var(--life-light); border-color: var(--life-mid); }
+    .source-btn.life:hover { background: var(--life-mid); }
+
+    /* TOP PICK badge */
+    .top-pick-banner {
+      background: linear-gradient(90deg, #D97706, #F59E0B);
+      color: white; font-size: 10px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 4px 12px; text-align: center;
+    }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      grid-column: 1/-1; text-align: center; padding: 60px 20px;
+      color: var(--text-muted); font-size: 15px;
+    }
+
+    /* ── FOOTER ── */
+    .page-footer {
+      text-align: center; padding: 20px; color: var(--text-muted);
+      font-size: 12px; border-top: 1px solid var(--border);
+      margin-top: 20px;
+    }
+    .page-footer a { color: var(--tech); text-decoration: none; }
+
+    /* Hidden */
+    .card[data-hidden="true"] { display: none; }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="header-eyebrow">
+      <span>🔍</span> Early Stage Deal Sourcing
+    </div>
+    <h1>
+      <span class="kr">딜 소싱 파이프라인</span>
+      <span class="sep">/</span>
+      <span class="en">Deal Flow</span>
+    </h1>
+    <p class="subtitle">글로벌 얼리스테이지 스타트업 발굴 리포트</p>
+    <div class="header-meta">
+      <span>📅 매일 저녁 자동 업데이트</span>
+      <span>🌏 Tech &amp; Life Science</span>
+      <span>⚡ beeorbug.github.io</span>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="stats-bar" id="statsBar">
+    <!-- filled by JS -->
+  </div>
+  <div class="filter-bar">
+    <button class="filter-btn active-all" onclick="setFilter('all', this)">전체 All</button>
+    <button class="filter-btn" onclick="setFilter('Tech', this)">💻 Tech</button>
+    <button class="filter-btn" onclick="setFilter('Life Science', this)">🧬 Life Science</button>
+  </div>
+  <div class="cards-grid" id="cardsGrid">
+    <!-- filled by JS -->
+  </div>
+</div>
+
+<footer class="page-footer">
+  Powered by <a href="https://beeorbug.github.io/morning-memo" target="_blank">Morning Memo</a> infrastructure &nbsp;·&nbsp;
+  Data sourced from public filings, YC, TechCrunch, BioSpace &amp; more &nbsp;·&nbsp;
+  <a href="https://github.com/beeorbug/deal-flow" target="_blank">GitHub</a>
+</footer>
+
+<script>
+  let allCompanies = [];
+  let currentFilter = 'all';
+
+  async function init() {
+    try {
+      const res = await fetch('./companies.json');
+      allCompanies = await res.json();
+    } catch(e) {
+      // fallback: companies embedded
+      allCompanies = COMPANIES_FALLBACK;
+    }
+    renderStats();
+    renderCards();
+  }
+
+  function setFilter(sector, btn) {
+    currentFilter = sector;
+    document.querySelectorAll('.filter-btn').forEach(b => {
+      b.className = 'filter-btn';
+    });
+    if (sector === 'all') btn.classList.add('active-all');
+    else if (sector === 'Tech') btn.classList.add('active-tech');
+    else btn.classList.add('active-life');
+    renderCards();
+  }
+
+  function renderStats() {
+    const total = allCompanies.length;
+    const tech = allCompanies.filter(c => c.sector === 'Tech').length;
+    const life = allCompanies.filter(c => c.sector === 'Life Science').length;
+    document.getElementById('statsBar').innerHTML = `
+      <div class="stat-chip">
+        <span class="dot" style="background:#1A202C"></span>
+        <span class="count">${total}</span> 총 기업
+      </div>
+      <div class="stat-chip">
+        <span class="dot" style="background:#2563EB"></span>
+        <span class="count">${tech}</span> Tech
+      </div>
+      <div class="stat-chip">
+        <span class="dot" style="background:#059669"></span>
+        <span class="count">${life}</span> Life Science
+      </div>
+    `;
+  }
+
+  function renderCards() {
+    const filtered = currentFilter === 'all'
+      ? allCompanies
+      : allCompanies.filter(c => c.sector === currentFilter);
+
+    // Sort: top picks first, then by date desc
+    const sorted = [...filtered].sort((a, b) => {
+      if (a.topPick && !b.topPick) return -1;
+      if (!a.topPick && b.topPick) return 1;
+      return b.date.localeCompare(a.date);
+    });
+
+    const grid = document.getElementById('cardsGrid');
+    if (sorted.length === 0) {
+      grid.innerHTML = '<div class="empty-state">No companies found for this filter.</div>';
+      return;
+    }
+    grid.innerHTML = sorted.map(c => cardHTML(c)).join('');
+  }
+
+  function cardHTML(c) {
+    const isTech = c.sector === 'Tech';
+    const accentColor = isTech ? '#2563EB' : '#059669';
+    const sectorClass = isTech ? 'tech' : 'life';
+    const whyClass = isTech ? 'tech-why' : 'life-why';
+    const stageLabel = c.stageAmount && c.stageAmount !== 'YC'
+      ? `${c.stage} · ${c.stageAmount}`
+      : c.stage;
+
+    return `
+      <div class="card${c.topPick ? ' top-pick' : ''}">
+        ${c.topPick ? '<div class="top-pick-banner">⭐ Top Pick</div>' : ''}
+        <div class="card-accent" style="background:${accentColor}"></div>
+        <div class="card-body">
+          <div class="card-top-row">
+            <span class="sector-pill ${sectorClass}">${c.sector}</span>
+            <span class="stage-badge">${escH(stageLabel)}</span>
+            <span class="card-icon">${c.icon}</span>
+            ${c.topPick ? '<span class="top-pick-star">⭐</span>' : ''}
+          </div>
+          <div class="card-company">${escH(c.company)}</div>
+          <div class="card-tagline">${escH(c.tagline)}</div>
+
+          <div class="card-section">
+            <div class="section-label">👤 Founders</div>
+            <div class="section-text">${escH(c.founders)}</div>
+          </div>
+
+          <div class="card-section">
+            <div class="section-label">📋 What they do</div>
+            <div class="section-text">${escH(c.what)}</div>
+          </div>
+
+          <div class="card-section">
+            <div class="section-label">💡 Why interesting</div>
+            <div class="why-box ${whyClass}">
+              <div class="section-text">${escH(c.why)}</div>
+            </div>
+          </div>
+
+          <div class="card-section">
+            <div class="section-label">🔗 Signal / Investors</div>
+            <div class="section-text">${escH(c.signal)}</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="date-badge">📅 ${c.date}</span>
+          <a class="source-btn ${sectorClass}" href="${c.url}" target="_blank" rel="noopener">
+            ${escH(c.source)} ↗
+          </a>
+        </div>
+      </div>
+    `;
+  }
+
+  function escH(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;');
+  }
+
+  // Inline fallback in case fetch fails (e.g. opened as file://)
+  const COMPANIES_FALLBACK = [];
+
+  init();
+</script>
+</body>
+</html>
