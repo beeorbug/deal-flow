@@ -272,6 +272,9 @@
 
     /* Hidden */
     .card[data-hidden="true"] { display: none; }
+    /* ── DATE FILTER ── */
+    .date-filter-bar { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 4px; }
+    .filter-btn.active-date { background: var(--text-primary); color: var(--bg-primary); border-color: var(--text-primary); }
   </style>
 </head>
 <body>
@@ -299,10 +302,13 @@
   <div class="stats-bar" id="statsBar">
     <!-- filled by JS -->
   </div>
-  <div class="filter-bar">
+  <div class="filter-bar" id="sector-filter-bar">
     <button class="filter-btn active-all" onclick="setFilter('all', this)">전체 All</button>
     <button class="filter-btn" onclick="setFilter('Tech', this)">💻 Tech</button>
     <button class="filter-btn" onclick="setFilter('Life Science', this)">🧬 Life Science</button>
+  </div>
+  <div class="filter-bar date-filter-bar" id="date-filter-bar">
+    <button class="filter-btn active-date" onclick="setDateFilter('all', this)">전체</button>
   </div>
   <div class="cards-grid" id="cardsGrid">
     <!-- filled by JS -->
@@ -318,6 +324,7 @@
 <script>
   let allCompanies = [];
   let currentFilter = 'all';
+  let currentDateFilter = 'all';
 
   async function init() {
     try {
@@ -327,13 +334,30 @@
       // fallback: companies embedded
       allCompanies = COMPANIES_FALLBACK;
     }
+    // Build date filter pills
+    (function(){
+      var dates=[...new Set(allCompanies.map(function(c){return c.date;}).filter(Boolean))].sort(function(a,b){return b.localeCompare(a);});
+      var fmt=function(d){var p=d.split('-');var mon=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+p[1]-1];return mon+' '+parseInt(p[2]);};
+      var bar=document.getElementById('date-filter-bar');
+      if(bar){
+        bar.innerHTML='<button class="filter-btn active-date" onclick="setDateFilter(\'all\', this)">전체</button>'+
+          dates.map(function(d){return '<button class="filter-btn" onclick="setDateFilter(\''+d+'\', this)">'+fmt(d)+'</button>';}).join('');
+      }
+    })();
     renderStats();
+    renderCards();
+  }
+
+  function setDateFilter(date, btn) {
+    currentDateFilter = date;
+    document.querySelectorAll('#date-filter-bar .filter-btn').forEach(b => { b.className = 'filter-btn'; });
+    btn.classList.add('active-date');
     renderCards();
   }
 
   function setFilter(sector, btn) {
     currentFilter = sector;
-    document.querySelectorAll('.filter-btn').forEach(b => {
+    document.querySelectorAll('#sector-filter-bar .filter-btn').forEach(b => {
       b.className = 'filter-btn';
     });
     if (sector === 'all') btn.classList.add('active-all');
@@ -363,9 +387,19 @@
   }
 
   function renderCards() {
-    const filtered = currentFilter === 'all'
+    const sectorFiltered = currentFilter === 'all'
       ? allCompanies
       : allCompanies.filter(c => c.sector === currentFilter);
+    const filtered = currentDateFilter === 'all'
+      ? sectorFiltered
+      : sectorFiltered.filter(c => c.date === currentDateFilter);
+    // Update subtitle
+    (function(){
+      const fmtD = function(d){ var p=d.split('-'); var mon=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+p[1]-1]; return mon+' '+parseInt(p[2]); };
+      var dl = currentDateFilter === 'all' ? '' : ' | '+fmtD(currentDateFilter);
+      var s = document.querySelector('.subtitle');
+      if(s) s.textContent = filtered.length+'개 회사 발굴'+dl;
+    })();
 
     // Sort: top picks first, then by date desc
     const sorted = [...filtered].sort((a, b) => {
