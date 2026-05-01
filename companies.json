@@ -1,5 +1,170 @@
 [
   {
+    "id": "dex-recruiting",
+    "name": "Dex",
+    "date": "2026-04-28",
+    "stage": "Seed",
+    "amount": "$5.3M",
+    "totalRaised": "$8.4M",
+    "sector": "AI / Recruiting",
+    "hq": "London, UK",
+    "description": "AI talent agent that automates hiring for hard-to-fill tech and AI engineering roles at startups.",
+    "investors": [
+      "Notion Capital",
+      "a16z Speedrun",
+      "Concept Ventures"
+    ],
+    "source": "Fortune",
+    "sourceUrl": "https://fortune.com/2026/04/28/exclusive-dex-ai-powered-recruiting-startup-raises-seed-round-notion-capital/"
+  },
+  {
+    "id": "general-analysis",
+    "name": "General Analysis",
+    "date": "2026-04-29",
+    "stage": "Seed",
+    "amount": "$10M",
+    "totalRaised": "$10M",
+    "sector": "AI / Security",
+    "hq": "San Francisco, CA",
+    "description": "Security infrastructure for agentic AI systems, preventing autonomous agents from operating without reliable safeguards.",
+    "investors": [
+      "Altos Ventures",
+      "645 Ventures",
+      "Menlo Ventures",
+      "Y Combinator"
+    ],
+    "source": "Axios",
+    "sourceUrl": "https://www.axios.com/pro/enterprise-software-deals/2026/04/29/agentic-ai-security-startup-general-analysis"
+  },
+  {
+    "id": "trifetch",
+    "name": "TriFetch",
+    "date": "2026-04-28",
+    "stage": "Pre-Seed",
+    "amount": "$1.9M",
+    "totalRaised": "$1.9M",
+    "sector": "AI / HealthTech",
+    "hq": "San Francisco, CA",
+    "description": "End-to-end AI automation platform for independent specialty clinics, handling patient scheduling, referral processing, and prior authorizations.",
+    "investors": [
+      "Nexus Venture Partners"
+    ],
+    "source": "TechFundingNews",
+    "sourceUrl": "https://techfundingnews.com/trifetch-raises-1-9m-from-nexus-venture-partners-to-help-specialty-clinics-skip-the-paperwork/"
+  },
+  {
+    "id": "noreja",
+    "name": "Noreja",
+    "date": "2026-04-28",
+    "stage": "Seed",
+    "amount": "€1.1M",
+    "totalRaised": "€2.85M",
+    "sector": "AI / Enterprise SaaS",
+    "hq": "Vorarlberg, Austria",
+    "description": "AI-powered process intelligence platform applying generative AI to process mining for enterprise workflow optimization.",
+    "investors": [
+      "Markus Neumayr",
+      "Jan Sprengnetter",
+      "Prof. Martin Kaiser",
+      "Gordana McNamara"
+    ],
+    "source": "EU-Startups",
+    "sourceUrl": "https://www.eu-startups.com/2026/04/austrias-noreja-closes-e1-1-million-round-to-scale-ai-powered-process-intelligence-platform/"
+  },
+  {
+    "id": "onsetto",
+    "name": "Onsetto",
+    "date": "2026-04-28",
+    "stage": "Seed",
+    "amount": "$9M",
+    "totalRaised": "$11.2M",
+    "sector": "Fintech",
+    "hq": "Minneapolis, MN",
+    "description": "AI-guided platform that helps banks and credit unions win and activate new business clients through automated business-account switching workflows.",
+    "investors": [
+      "Canapi Ventures",
+      "EJF Ventures",
+      "Idea Fund of La Crosse",
+      "The Perch Fund"
+    ],
+    "source": "Next in the North",
+    "sourceUrl": "https://www.nextinthenorth.com/onsetto-raises-9m-seed-ii-led-by-canapi-ventures/"
+  },
+  {
+    "id": "dreambase",
+    "name": "Dreambase",
+    "date": "2026-04-29",
+    "stage": "Seed",
+    "amount": "$3.7M",
+    "totalRaised": "$3.7M",
+    "sector": "AI / Data Analytics",
+    "hq": "Austin, TX",
+    "description": "AI-native analytics platform for Postgres and Supabase-based apps, enabling product teams to get data insights without a dedicated data team.",
+    "investors": [
+      "Felicis",
+      "Active Capital",
+      "FirstMile Ventures",
+      "Darkmode Ventures"
+    ],
+    "source": "Crunchbase News",
+    "sourceUrl": "https://news.crunchbase.com/venture/supabase-startup-investment-dreambase-ai-felicis/"
+  },
+  {
+    "id": "primogene",
+    "name": "Primogene",
+    "date": "2026-04-29",
+    "stage": "Seed",
+    "amount": "€4.1M",
+    "totalRaised": "€4.1M",
+    "sector": "Biotech",
+    "hq": "Leipzig, Germany",
+    "description": "Enzymatic biomanufacturing platform producing complex bioactive molecules at industrial scale for infant nutrition and pharmaceutical applications.",
+    "investors": [
+      "High-Tech Gründerfonds (HTGF)",
+      "Technologiegründerfonds Sachsen (TGFS)",
+      "better ventures"
+    ],
+    "source": "EU-Startups",
+    "sourceUrl": "https://www.eu-startups.com/2026/04/leipzigs-primogene-raises-e4-1-million-to-scale-enzymatic-biomanufacturing-of-complex-bioactive-molecules/"
+  },
+  {
+    "id": "shapes",
+    "name": "Shapes",
+    "date": "2026-04-29",
+    "stage": "Seed",
+    "amount": "$8M",
+    "totalRaised": "$16M",
+    "sector": "AI / Social",
+    "hq": "San Francisco, CA",
+    "description": "App platform that lets humans and AI agents coexist in the same group chats, with 400k+ monthly active users and 3M+ AI agents created.",
+    "investors": [
+      "Lightspeed",
+      "AI Capital Partners",
+      "AI Grant"
+    ],
+    "source": "GlobeNewswire",
+    "sourceUrl": "https://www.globenewswire.com/news-release/2026/04/29/3283796/0/en/ai-enters-the-group-chat-startup-shapes-emerges-from-stealth-with-8m-seed-round-addresses-ai-psychosis-with-first-app-where-you-can-talk-to-ai-with-friends.html"
+  },
+  {
+    "id": "performativ",
+    "name": "Performativ",
+    "date": "2026-04-28",
+    "stage": "Series A",
+    "amount": "$14M",
+    "totalRaised": "$19.9M",
+    "sector": "AI / WealthTech",
+    "hq": "Copenhagen, Denmark",
+    "description": "AI-native wealth management OS consolidating portfolio management, risk analytics, compliance, and trading into one platform for private banks and asset managers.",
+    "investors": [
+      "Deutsche Börse Group",
+      "Rabo Investments",
+      "FinTech Collective",
+      "EIFO"
+    ],
+    "source": "GlobeNewswire",
+    "sourceUrl": "https://www.globenewswire.com/news-release/2026/04/28/3282632/0/en/performativ-raises-14m-series-a-led-by-deutsche-b%C3%B6rse-group-to-power-the-next-era-of-wealth-management.html"
+  },
+  {
     "date": "2026-04-11",
     "company": "Stipple Bio",
     "sector": "Life Science",
